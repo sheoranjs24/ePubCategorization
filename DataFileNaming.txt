@@ -1,0 +1,31 @@
+1-Filenaming conventions
+
+Main section
+
+SF = science fiction
+FN = fantasy
+BI = biography
+RM = romance
+MY = mystery
+HR = horror
+TH = thriller
+PH = philosophy
+TR = travel
+CL = chick lit
+
+Sub-section - genre
+
+PA = post apocalyptic
+SP = space opera
+MI = military
+LD = light vs dark, good vs evil
+SS = swords and sorcery
+CL = classic
+CN = contemporary
+
+Target age
+
+G = general
+A = adult
+J = junior
+X = sexual content
