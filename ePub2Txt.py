@@ -1,6 +1,4 @@
 import os, sys, re
-import codecs
-import unicodedata
 from bs4 import BeautifulSoup
 
 booksDir = sys.argv[1]
@@ -35,12 +33,8 @@ def parseContents(contentList):
 		pTagList = soup.find_all('p')
 		textList = []
 		for pTag in pTagList:
-			# if len(pTag.text) > 0:
-				# print len(pTag.text)
-				# decode_text = pTag.text.decode('utf-8')
-				# textList.append(decode_text)
-			textList.append(pTag.text)
-			# print pTag.text
+			if len(pTag.text) > 0:
+				textList.append(pTag.text.encode("utf-8"))
 		
 		saveContents(filename+".txt", textList)
 
@@ -52,9 +46,8 @@ def saveContents(filename, contentsList):
 	try:
 		fhandler = open(fullFilename, 'a')
 		for content in contentsList:
-			# content = unicode(content.strip(codecs.BOM_UTF8), 'utf-8')		
-			fhandler.write(content)
-			print content
+			fhandler.write(content+'\n')
+
 		fhandler.close()
 	except Exception, e:
 		raise e
