@@ -39,7 +39,7 @@ def parseContents(contentList):
 				try:
 					txt = pTag.get_text().decode("utf-8")
 					textList.append(txt)
-					print txt
+					# print txt
 				except Exception, e:
 					print 'except'
 					pass
