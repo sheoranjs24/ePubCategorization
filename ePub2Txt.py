@@ -1,5 +1,6 @@
 import os, sys, re
 from bs4 import BeautifulSoup
+from bs4 import UnicodeDammit
 
 booksDir = sys.argv[1]
 txtFileDir = sys.argv[2]
@@ -29,12 +30,19 @@ def parseContents(contentList):
 
 		# start to read contents from the file
 		soup = BeautifulSoup(open(fullFilename))
-		# soup.p.encode("utf-8")
+		# print soup.original_encoding
+		soup.encode("utf-8")
 		pTagList = soup.find_all('p')
 		textList = []
 		for pTag in pTagList:
-			if len(pTag.text) > 0:
-				textList.append(pTag.text.encode("utf-8"))
+			if len(pTag.get_text()) > 0:
+				try:
+					txt = pTag.get_text().decode("utf-8")
+					textList.append(txt)
+					print txt
+				except Exception, e:
+					print 'except'
+					pass
 		
 		if len(textList) > 0:
 			saveContents(filename+".txt", textList)
@@ -42,7 +50,7 @@ def parseContents(contentList):
 # save parsed contents of each book in a specific direcoty with its genre name and ordered number
 def saveContents(filename, contentsList):
 	fullFilename = os.path.join(txtFileDir, filename)
-	print "fullFilename", fullFilename
+	# print "fullFilename", fullFilename
 
 	try:
 		fhandler = open(fullFilename, 'a')
