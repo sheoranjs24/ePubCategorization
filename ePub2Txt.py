@@ -36,7 +36,8 @@ def parseContents(contentList):
 			if len(pTag.text) > 0:
 				textList.append(pTag.text.encode("utf-8"))
 		
-		saveContents(filename+".txt", textList)
+		if len(textList) > 0:
+			saveContents(filename+".txt", textList)
 
 # save parsed contents of each book in a specific direcoty with its genre name and ordered number
 def saveContents(filename, contentsList):
