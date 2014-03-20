@@ -18,22 +18,28 @@ def ScanContents(rootdir):
 # parse contents in each html file
 def parseContents(contentList):
 	for fullFilename in contentList:
+		basename = ""
 		epubNames = re.findall('/.*\.epub', fullFilename, re.DOTALL)
-		epubName = os.path.basename(epubNames[0])
+		ibooksNames = re.findall('/.*\.ibooks', fullFilename, re.DOTALL)
+		if len(epubNames) > 0:
+			basename = os.path.basename(epubNames[0])
+		elif len(ibooksNames) > 0:
+			basename = os.path.basename(ibooksNames[0])
 
-		# the basename of the content file
+		# the basename of the content file(xxx.html/htm/xhtml)
 		htmlBasename = os.path.basename(fullFilename)
 		# print htmlName
 
-		# create dest epub folder name by contatinating pickoutFolder and epubName together
-		destFolder = os.path.join(pickoutFolder, epubName)
-		if not os.path.exists(destFolder):
-			os.makedirs(destFolder)
+		if len(basename) > 0:
+			# create dest epub folder name by contatinating pickoutFolder and epubName together
+			destFolder = os.path.join(pickoutFolder, basename)
+			if not os.path.exists(destFolder):
+				os.makedirs(destFolder)
 
-		# create the full name of the content file in the destination folder
-		fullHtmlFilename = os.path.join(destFolder, htmlBasename)
-		# exactly copy file
-		shutil.copyfile(fullFilename, fullHtmlFilename)
+			# create the full name of the content file in the destination folder
+			fullHtmlFilename = os.path.join(destFolder, htmlBasename)
+			# exactly copy file
+			shutil.copyfile(fullFilename, fullHtmlFilename)
 
 
 # main callee

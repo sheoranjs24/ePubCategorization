@@ -16,7 +16,8 @@ RG = religion			done
 Sp = Spritiual			done
 
 MI = military			done
-
+HI = history			done
+GD = gardening			done
 
 Sub-section - genre
 
@@ -34,3 +35,25 @@ G = general
 A = adult
 J = junior
 X = sexual content
+
+
+Hello ALL,
+
+I fixed another bug in ePub2Txt.py and re-parsed the txts.
+
+SF = science fiction	done(103 txts)
+FN = fantasy		done(94 txts)
+BI = biography		done(153 txts)
+RM = romance		done(79 txts)
+HR = horror		done(100 txts)
+TR = travel		done(on Jyoti's local)
+RG = religion		done(112 txts)
+Sp = Spritiual		done(22 txts)
+MI = military		done(43 txts)
+HI = history		done(84 txts)
+GD = gardening		done(66 txts)
+
+All the txts have been uploaded to txtsFromePubs.
+
+
+Rex

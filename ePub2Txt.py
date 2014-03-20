@@ -24,42 +24,67 @@ def ScanContents(rootdir):
 def parseContents(contentList):
 	for fullFilename in contentList:
 		# print fullFilename
-		nameList = re.findall('/(.*)\.epub', fullFilename, re.DOTALL)
-		filename = os.path.basename(nameList[0])
+		# nameList = re.findall('/(.*)\.epub', fullFilename, re.DOTALL)
+		# filename = os.path.basename(nameList[0])
 		# print filename
 
+		basename = ""
+		epubNames = re.findall('/(.*)\.epub', fullFilename, re.DOTALL)
+		ibooksNames = re.findall('/(.*)\.ibooks', fullFilename, re.DOTALL)
+		if len(epubNames) > 0:
+			basename = os.path.basename(epubNames[0])
+		elif len(ibooksNames) > 0:
+			basename = os.path.basename(ibooksNames[0])
+
 		# start to read contents from the file
-		soup = BeautifulSoup(open(fullFilename))
-		# print soup.original_encoding
-		soup.encode("utf-8")
-		pTagList = soup.find_all('p')
-		textList = []
-		for pTag in pTagList:
-			if len(pTag.get_text()) > 0:
-				try:
-					txt = pTag.get_text().decode("utf-8")
-					textList.append(txt)
-					# print txt
-				except Exception, e:
-					print 'except'
-					pass
-		
-		if len(textList) > 0:
-			saveContents(filename+".txt", textList)
+		try:
+			soup = BeautifulSoup(open(fullFilename))
+			sp = BeautifulSoup(unicode(soup))
+			textList = []
+			for pTag in sp.find_all('p'):
+				# print pTag
+				# print pTag.string
+				if len(pTag.text) > 0:					
+					try:
+						unicode_string = pTag.get_text()#unicode(pTag.string)
+						txt = unicode_string.encode("utf-8", errors='replace')
+						# txt = unicode(pTag.get_text(), errors='ignore')
+						textList.append(txt)
+						# print len(txt),"-->",txt
+					except Exception, e:
+						print 'start  *****************'
+						# print len(pTag.text),":",pTag.text
+						print "test \"\"   \'"
+						print 'end    *****************'
+						raise
+						# pass
+			
+			if len(textList) > 0:
+				saveContents(basename+".txt", textList)
+			
+		except Exception, e:
+			print "....................."
+			pass
+			# raise e
 
 # save parsed contents of each book in a specific direcoty with its genre name and ordered number
 def saveContents(filename, contentsList):
 	fullFilename = os.path.join(txtFileDir, filename)
 	# print "fullFilename", fullFilename
 
-	try:
-		fhandler = open(fullFilename, 'a')
-		for content in contentsList:
+	# try:
+	fhandler = open(fullFilename, 'ab')
+	for content in contentsList:
+		try:
 			fhandler.write(content+'\n')
+			# print "content:", content
+		except Exception, e:
+			# print "ex start ##############"
+			# print "content:", content
+			# print "ex end  ##############"
+			raise e		
 
-		fhandler.close()
-	except Exception, e:
-		raise e
+	fhandler.close()
 
 
 # main callee
