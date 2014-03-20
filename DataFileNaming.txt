@@ -3,15 +3,15 @@
 Main section
 
 SF = science fiction
-FN = fantasy
+FN = fantasy      
 BI = biography
 RM = romance
-MY = mystery
+MY = mystery  --
 HR = horror
-TH = thriller
-PH = philosophy
+TH = thriller --
+PH = philosophy --
 TR = travel
-CL = chick lit
+CL = chick lit --
 
 Sub-section - genre
 
