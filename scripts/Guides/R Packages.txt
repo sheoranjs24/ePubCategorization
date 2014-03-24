@@ -1,0 +1,25 @@
+R Packages:
+# install a package
+install.packages("multicore")
+#load a package
+library("multicore")
+
+# Data import/export
+MASS
+foreign
+XML
+StatDataML #XML
+
+# High Performance computing
+multicore   #mclapply() is a multicore version of lapply()
+snow
+foreach
+fork
+
+# Text preprocessing
+
+
+# Statistics
+
+
+# Data mining
