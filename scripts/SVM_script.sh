@@ -31,6 +31,7 @@ write.table(mydata1, file = "/Users/sheoranjs24/Projects/ePubCategorization/data
 #***********************************************************
 # Step 2 : Load data and run feature selection 
 #load text file in python ------------
+import numpy
 X_train = numpy.loadtxt("X_train.txt", delimiter=',', dtype="float")
 Y_train = numpy.load("Y_train.npy")
 X_features = numpy.loadtxt("X_features.txt", delimiter=',', dtype="str")
@@ -38,18 +39,19 @@ X_features = numpy.loadtxt("X_features.txt", delimiter=',', dtype="str")
 # feature selection 
 import sklearn
 from sklearn import feature_selection
-myselector = feature_selection.SelectPercentile(score_func=feature_selection.chi2, percentile=50) # used 30 for 170
+#myselector = feature_selection.SelectPercentile(score_func=feature_selection.chi2, percentile=50) # used 30 for 170
+myselector = feature_selection.SelectKBest(score_func=feature_selection.chi2, k=100)
 myfeatures = myselector.fit(X_train, Y_train)
 
 # store selected features for later use (when we test new ebooks)
 new_features = X_features [myselector.get_support(indices=True)] 
 # save new features to file .npy extension
-numpy.save("final_features", new_features)
+numpy.save("final_features_100", new_features)
 
 # new data based on selected features
 new_X_train = myselector.transform(X_train)
 # save new_training_data to file .npy extension
-numpy.save("new_X_train", new_X_train)
+numpy.save("new_X_train_100", new_X_train)
 
 ##***********************************************************
 # Step 3 : Run SVM and save svm to file 
