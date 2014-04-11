@@ -5,6 +5,37 @@ from bs4 import UnicodeDammit
 booksDir = sys.argv[1]
 txtFileDir = sys.argv[2]
 
+# booksDir = "./htmls/"
+# txtFileDir = "./txts"
+
+skipTxtList = ["All rights reserved",
+			  	"Copyright",
+			   	"Copyright 20",
+			   	"This eBook is licensed for your personal",
+				"Discover upcoming titles by",
+				"Discover other titles by",
+				"Cover created by",
+				"Front Cover Art",
+				"Thank you for downloading this free ebook.",
+				"Smashwords Edition",
+				"Dedicated to my"]
+stopPTxtList = ["About the author", "THE AUTHOR"]
+
+
+# genre path
+def genrePathFetcher():
+	genreList = [os.path.join(genrePath, name) for name in os.listdir(genrePath) if os.path.isdir(os.path.join(genrePath, name))]
+	return genreList
+
+# epub path
+def epubPathFetcher():
+	allEPubs = []
+	genreList = genrePathFetcher()
+	for genre in genreList:
+		epublist = [os.path.join(genre, name) for name in os.listdir(genre) if os.path.isdir(os.path.join(genre, name))]
+		allEPubs = allEPubs + epublist
+
+	return allEPubs	
 
 # scan all the content files for all books, and return an array of the content file list
 def ScanContents(rootdir):
@@ -49,12 +80,27 @@ def parseContents(contentList):
 						unicode_string = pTag.get_text()#unicode(pTag.string)
 						txt = unicode_string.encode("utf-8", errors='replace')
 						# txt = unicode(pTag.get_text(), errors='ignore')
+						needStop = False
+						for stopPTxt in stopPTxtList:
+							if stopPTxt in txt:
+								needStop = True
+						if needStop == True:
+							break
+
+						needSkip = False
+						for skipTxt in skipTxtList:
+							if skipTxt in txt:
+								needSkip = True
+								break
+						if needSkip == True:
+							continue
+
 						textList.append(txt)
 						# print len(txt),"-->",txt
 					except Exception, e:
 						print 'start  *****************'
-						# print len(pTag.text),":",pTag.text
-						print "test \"\"   \'"
+						print len(pTag.text),":",pTag.text
+						# print "test \"\"   \'"
 						print 'end    *****************'
 						raise
 						# pass
@@ -95,7 +141,6 @@ def main():
 
 	contentList = ScanContents(booksDir)
 	parseContents(contentList)
-	
 
 # where start to wrok
 if __name__ == '__main__':

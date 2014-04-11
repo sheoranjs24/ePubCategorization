@@ -4,7 +4,9 @@ import plistlib
 
 # rawEPubFolder = sys.argv[1]
 pickoutFolder = sys.argv[1]
-epubPath = "/Users/leicheng/Library/Containers/com.apple.BKAgentService/Data/Documents/iBooks/Books"
+# epubPath = "/Users/leicheng/Library/Containers/com.apple.BKAgentService/Data/Documents/iBooks/Books"
+genrePath = "/Users/leicheng/workspace/academic/2014Spring/CSC578D/project/tGenre/"
+# epubPath = 
 
 # scan folders in a directory
 def scanFolders():	
@@ -13,6 +15,21 @@ def scanFolders():
 	# 	print name
 
 	return epubFullPathList
+
+# genre path
+def genrePathFetcher():
+	genreList = [os.path.join(genrePath, name) for name in os.listdir(genrePath) if os.path.isdir(os.path.join(genrePath, name))]
+	return genreList
+
+# epub path
+def epubPathFetcher():
+	allEPubs = []
+	genreList = genrePathFetcher()
+	for genre in genreList:
+		epublist = [os.path.join(genre, name) for name in os.listdir(genre) if os.path.isdir(os.path.join(genre, name))]
+		allEPubs = allEPubs + epublist
+
+	return allEPubs
 
 # parse iTunesMetadata.plist
 def obtainMetadata(metadata):
@@ -31,11 +48,14 @@ def picker(epubname, htmlList):
 # pickManager
 def pickManager():
 	bookCnt = 0
-	epubFullPathList = scanFolders()
+	# epubFullPathList = scanFolders()
+	epubFullPathList = epubPathFetcher()
+
 	for epubPath in epubFullPathList:
 		metadata = obtainMetadata(os.path.join(epubPath, "iTunesMetadata.plist"))
 		language = unicode(metadata["primaryLanguage"], errors='ignore')
-		genre = unicode(metadata["genre"], errors='ignore')
+		# genre = unicode(metadata["genre"], errors='ignore')
+		genre = epubPath.replace(genrePath,'')[:2]
 		if language == "en":
 			# create destination epub path
 			destGenrePath = os.path.join(pickoutFolder, genre)
@@ -57,8 +77,11 @@ def ScanContents(epubPath):
 	for dirname, subdirs, files in os.walk(epubPath):
 		for fname in files:
 			name, ext = os.path.splitext(fname)
-			if ext == ".html" or ext == ".xhtml" or ext == ".htm" or fname == "iTunesMetadata.plist":
-				contentList.append(os.path.join(dirname, fname))
+			if ext == ".html" or ext == ".xhtml" or ext == ".htm":
+				if "title" in name or "Title" in name or "cover" in name or "Cover" in name or "toc" in name or "copyright" in name or "disclaimer" in name or "tocConfig" in name:
+					continue
+				else:
+					contentList.append(os.path.join(dirname, fname))
 
 	return contentList
 
